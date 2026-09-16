@@ -1,50 +1,438 @@
-<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>31 Day Tracker</title>
-<style>
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f2f2f7;margin:0;color:#111}.app{max-width:520px;margin:auto;padding:20px 14px 40px}h1{margin:5px 4px}.sub{color:#777;margin:4px 4px 18px}.card{background:#fff;border-radius:18px;padding:15px;margin-bottom:14px}.stats{display:flex;gap:8px}.stat{flex:1;text-align:center;background:#f2f2f7;border-radius:12px;padding:10px}.stat b{display:block;font-size:19px}.stat span{font-size:11px;color:#777}.head,.row{display:grid;grid-template-columns:1fr 70px 32px 32px;align-items:center}.head{font-size:11px;color:#777;padding:0 7px 7px}.row{min-height:52px;border-top:1px solid #eee;padding:4px 7px}.day{display:flex;align-items:center;gap:8px;font-weight:600}input[type=checkbox]{appearance:none;width:25px;height:25px;border:2px solid #aaa;border-radius:7px;background:#fff;margin:0;position:relative}input[type=checkbox]:checked{background:#111;border-color:#111}input[type=checkbox]:checked:after{content:"✓";color:#fff;position:absolute;left:4px;top:-1px;font-weight:bold;font-size:17px}.score{width:58px;height:34px;justify-self:center;border:0;border-radius:10px;background:#f2f2f7;text-align:center;font-size:15px;font-weight:600}.t,.w{justify-self:center}button{border:0;background:#111;color:#fff;border-radius:11px;padding:10px 14px;font-weight:600}.actions{display:flex;justify-content:space-between;align-items:center}.note{font-size:12px;color:#777;margin-top:10px}
-</style></head><body><main class="app"><h1>31 Day Tracker</h1><p class="sub">Lock in. One day at a time.</p>
-<div class="card"><div class="stats"><div class="stat"><b id="d">0/31</b><span>DAYS</span></div><div class="stat"><b id="s">0/155</b><span>SCORE</span></div><div class="stat"><b id="t">0/31</b><span>T</span></div><div class="stat"><b id="w">0/31</b><span>W</span></div></div></div>
-<div class="card"><div class="head"><div>DAY</div><div style="text-align:center">SCORE</div><div style="text-align:center">T</div><div style="text-align:center">W</div></div><div id="rows"></div><div class="note">Tap either box. Tap a score to change it from 0–5. Progress saves automatically.</div></div>
-<div class="card actions"><b>Reset tracker</b><button onclick="resetAll()">Reset</button></div></main>
-<script>
-const K='tracker31';let x=JSON.parse(localStorage.getItem(K)||'null')||Array.from({length:31},()=>({d:0,s:0,t:0,w:0}));
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f2f2f7">
 
-x.forEach(a=>{if(a.w===undefined)a.w=0});
+<title>31 Day Tracker</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;
+  background:#f2f2f7;
+  margin:0;
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+}
+
+.app{
+  width:100%;
+  max-width:520px;
+  margin:auto;
+  padding:calc(18px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom));
+}
+
+/* HEADER */
+
+.header{
+  padding:8px 6px 20px;
+}
+
+h1{
+  margin:0;
+  font-size:34px;
+  line-height:1.1;
+  letter-spacing:-1.2px;
+  font-weight:750;
+}
+
+.sub{
+  color:#777;
+  margin:7px 0 0;
+  font-size:15px;
+}
+
+/* CARDS */
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:15px;
+  margin-bottom:14px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.stat{
+  text-align:center;
+  background:#f2f2f7;
+  border-radius:15px;
+  padding:12px 4px 11px;
+}
+
+.stat b{
+  display:block;
+  font-size:18px;
+  line-height:22px;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+.stat span{
+  display:block;
+  font-size:10px;
+  color:#777;
+  margin-top:3px;
+  font-weight:600;
+  letter-spacing:.3px;
+}
+
+/* TABLE HEADER */
+
+.head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 64px 32px 32px;
+  align-items:center;
+  padding:2px 7px 9px;
+  font-size:10px;
+  color:#8a8a8f;
+  font-weight:600;
+  letter-spacing:.5px;
+}
+
+.head div:nth-child(2),
+.head div:nth-child(3),
+.head div:nth-child(4){
+  text-align:center;
+}
+
+/* ROWS */
+
+.row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 64px 32px 32px;
+  align-items:center;
+  min-height:57px;
+  border-top:1px solid #eee;
+  padding:5px 7px;
+}
+
+.day{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:16px;
+  font-weight:600;
+  letter-spacing:-.2px;
+}
+
+/* CHECKBOXES */
+
+input[type=checkbox]{
+  appearance:none;
+  -webkit-appearance:none;
+  width:26px;
+  height:26px;
+  border:2px solid #c7c7cc;
+  border-radius:8px;
+  background:#fff;
+  margin:0;
+  position:relative;
+  flex-shrink:0;
+  transition:.15s ease;
+}
+
+input[type=checkbox]:checked{
+  background:#111;
+  border-color:#111;
+}
+
+input[type=checkbox]:checked:after{
+  content:"✓";
+  color:#fff;
+  position:absolute;
+  left:4px;
+  top:-1px;
+  font-weight:700;
+  font-size:17px;
+}
+
+/* SCORE */
+
+.score{
+  width:56px;
+  height:36px;
+  justify-self:center;
+  border:0;
+  outline:none;
+  border-radius:11px;
+  background:#f2f2f7;
+  text-align:center;
+  font-size:16px;
+  font-weight:650;
+  color:#111;
+  font-family:inherit;
+}
+
+.score:focus{
+  background:#e5e5ea;
+}
+
+/* T / W */
+
+.t,.w{
+  justify-self:center;
+}
+
+/* NOTE */
+
+.note{
+  font-size:12px;
+  line-height:17px;
+  color:#8a8a8f;
+  margin:13px 5px 2px;
+}
+
+/* RESET */
+
+.actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 15px;
+}
+
+.actions b{
+  font-size:15px;
+  font-weight:600;
+}
+
+button{
+  border:0;
+  background:#111;
+  color:#fff;
+  border-radius:12px;
+  padding:10px 15px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:650;
+}
+
+button:active{
+  transform:scale(.96);
+  opacity:.8;
+}
+
+/* SMALL IPHONES */
+
+@media(max-width:380px){
+  .app{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .stats{
+    gap:6px;
+  }
+
+  .stat{
+    padding-left:2px;
+    padding-right:2px;
+  }
+
+  .stat b{
+    font-size:16px;
+  }
+
+  .head,
+  .row{
+    grid-template-columns:minmax(0,1fr) 60px 30px 30px;
+  }
+
+  .score{
+    width:52px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+  <div class="header">
+    <h1>31 Day Tracker</h1>
+    <p class="sub">Lock in. One day at a time.</p>
+  </div>
+
+  <div class="card">
+    <div class="stats">
+
+      <div class="stat">
+        <b id="d">0/31</b>
+        <span>DAYS</span>
+      </div>
+
+      <div class="stat">
+        <b id="s">0/155</b>
+        <span>SCORE</span>
+      </div>
+
+      <div class="stat">
+        <b id="t">0/31</b>
+        <span>T</span>
+      </div>
+
+      <div class="stat">
+        <b id="w">0/31</b>
+        <span>W</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="head">
+      <div>DAY</div>
+      <div>SCORE</div>
+      <div>T</div>
+      <div>W</div>
+    </div>
+
+    <div id="rows"></div>
+
+    <div class="note">
+      Tap a box to complete it. Tap a score to change it from 0–5. Progress saves automatically.
+    </div>
+
+  </div>
+
+  <div class="card actions">
+    <b>Reset tracker</b>
+    <button onclick="resetAll()">Reset</button>
+  </div>
+
+</main>
+
+<script>
+
+const K='tracker31';
+
+let x=JSON.parse(localStorage.getItem(K)||'null')
+  ||Array.from({length:31},()=>({d:0,s:0,t:0,w:0}));
+
+/* Keep existing trackers compatible */
+
+x.forEach(a=>{
+  if(a.w===undefined)a.w=0;
+});
 
 let r=document.getElementById('rows');
 
-function save(){localStorage.setItem(K,JSON.stringify(x));stats()}
+function save(){
+  localStorage.setItem(K,JSON.stringify(x));
+  stats();
+}
 
 function stats(){
-d.textContent=x.filter(a=>a.d).length+'/31';
-s.textContent=x.reduce((q,a)=>q+a.s,0)+'/155';
-t.textContent=x.filter(a=>a.t).length+'/31';
-w.textContent=x.filter(a=>a.w).length+'/31'
+
+  d.textContent=
+    x.filter(a=>a.d).length+'/31';
+
+  s.textContent=
+    x.reduce((q,a)=>q+a.s,0)+'/155';
+
+  t.textContent=
+    x.filter(a=>a.t).length+'/31';
+
+  w.textContent=
+    x.filter(a=>a.w).length+'/31';
 }
 
 function render(){
-r.innerHTML='';
-x.forEach((a,i)=>{
-let z=document.createElement('div');
-z.className='row';
-z.innerHTML='<label class="day"><input type="checkbox" '+(a.d?'checked':'')+'><span>Day '+(i+1)+'</span></label><input class="score" type="number" min="0" max="5" value="'+a.s+'"><input class="t" type="checkbox" '+(a.t?'checked':'')+'><input class="w" type="checkbox" '+(a.w?'checked':'')+'>';
 
-z.children[0].children[0].onchange=e=>{a.d=e.target.checked?1:0;save()};
-z.children[1].onchange=e=>{a.s=Math.max(0,Math.min(5,parseInt(e.target.value)||0));e.target.value=a.s;save()};
-z.children[2].onchange=e=>{a.t=e.target.checked?1:0;save()};
-z.children[3].onchange=e=>{a.w=e.target.checked?1:0;save()};
+  r.innerHTML='';
 
-r.appendChild(z)
-});
-stats()
+  x.forEach((a,i)=>{
+
+    let z=document.createElement('div');
+
+    z.className='row';
+
+    z.innerHTML=
+      '<label class="day">'+
+      '<input type="checkbox" '+(a.d?'checked':'')+'>'+
+      '<span>Day '+(i+1)+'</span>'+
+      '</label>'+
+
+      '<input class="score" type="number" min="0" max="5" value="'+a.s+'">'+
+
+      '<input class="t" type="checkbox" '+(a.t?'checked':'')+'>'+
+
+      '<input class="w" type="checkbox" '+(a.w?'checked':'')+'>';
+
+    /* Day checkbox */
+
+    z.children[0].children[0].onchange=e=>{
+      a.d=e.target.checked?1:0;
+      save();
+    };
+
+    /* Score */
+
+    z.children[1].onchange=e=>{
+      a.s=Math.max(
+        0,
+        Math.min(5,parseInt(e.target.value)||0)
+      );
+
+      e.target.value=a.s;
+      save();
+    };
+
+    /* T */
+
+    z.children[2].onchange=e=>{
+      a.t=e.target.checked?1:0;
+      save();
+    };
+
+    /* W */
+
+    z.children[3].onchange=e=>{
+      a.w=e.target.checked?1:0;
+      save();
+    };
+
+    r.appendChild(z);
+
+  });
+
+  stats();
 }
 
 function resetAll(){
-if(confirm('Reset all 31 days?')){
-x=Array.from({length:31},()=>({d:0,s:0,t:0,w:0}));
-save();
-render()
-}
+
+  if(confirm('Reset all 31 days?')){
+
+    x=Array.from(
+      {length:31},
+      ()=>({d:0,s:0,t:0,w:0})
+    );
+
+    save();
+    render();
+  }
 }
 
 render();
-</script></body></html>
+
+</script>
+
+</body>
+</html>
