@@ -156,26 +156,6 @@ h1{
   gap:6px;
 }
 
-/* DAY NUMBER */
-
-.day-number{
-  width:36px;
-  height:36px;
-  border-radius:11px;
-  background:#f2f2f7;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:700;
-  color:#555;
-}
-
-.day-row.complete .day-number{
-  background:#111;
-  color:white;
-}
-
 .day-name{
   font-size:15px;
   font-weight:650;
@@ -211,7 +191,7 @@ h1{
   background:#e5e5ea;
 }
 
-/* T / W */
+/* CHECKBOXES */
 
 .check-label{
   display:flex;
@@ -265,13 +245,9 @@ h1{
   text-align:left;
 }
 
-.column-head div:nth-child(3){
-  text-align:center;
-}
+/* SAVE */
 
-/* RESET */
-
-.reset-card{
+.save-card{
   margin-top:14px;
   background:white;
   border-radius:18px;
@@ -281,8 +257,15 @@ h1{
   align-items:center;
 }
 
-.reset-card b{
+.save-card b{
   font-size:15px;
+}
+
+.save-card span{
+  display:block;
+  color:#999;
+  font-size:11px;
+  margin-top:3px;
 }
 
 button{
@@ -299,6 +282,111 @@ button{
 button:active{
   transform:scale(.96);
   opacity:.8;
+}
+
+/* MONTHS */
+
+.months-card{
+  margin-top:14px;
+  background:white;
+  border-radius:22px;
+  padding:14px;
+}
+
+.months-title{
+  font-size:18px;
+  font-weight:700;
+  padding:3px 5px 12px;
+}
+
+.months-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.month-button{
+  background:#f2f2f7;
+  color:#111;
+  border-radius:15px;
+  padding:12px 6px;
+  min-height:58px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.month-button.active{
+  background:#111;
+  color:white;
+}
+
+.month-button.saved{
+  background:#e5e5ea;
+}
+
+.month-button.active.saved{
+  background:#111;
+  color:white;
+}
+
+.month-percent{
+  display:block;
+  font-size:10px;
+  font-weight:600;
+  opacity:.55;
+  margin-top:4px;
+}
+
+.month-button.active .month-percent{
+  opacity:.7;
+}
+
+/* MONTH VIEW */
+
+.month-view{
+  margin-top:14px;
+  background:white;
+  border-radius:22px;
+  padding:14px;
+  display:none;
+}
+
+.month-view.show{
+  display:block;
+}
+
+.month-view-title{
+  font-size:18px;
+  font-weight:700;
+  padding:3px 5px 12px;
+}
+
+.month-summary{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.summary-box{
+  background:#f2f2f7;
+  border-radius:15px;
+  padding:12px;
+}
+
+.summary-box b{
+  display:block;
+  font-size:19px;
+}
+
+.summary-box span{
+  display:block;
+  color:#999;
+  font-size:10px;
+  font-weight:650;
+  margin-top:3px;
+  letter-spacing:.3px;
 }
 
 /* NOTE */
@@ -352,7 +440,7 @@ button:active{
 
   <div class="header">
     <h1>31 Day Tracker</h1>
-    <p class="sub">Lock in. One day at a time.</p>
+    <p class="sub" id="subtitle">January • One day at a time.</p>
   </div>
 
   <!-- PROGRESS -->
@@ -360,7 +448,10 @@ button:active{
   <div class="progress-card">
 
     <div class="progress-top">
-      <div class="progress-title">OVERALL PROGRESS</div>
+      <div class="progress-title" id="progressTitle">
+        JANUARY PROGRESS
+      </div>
+
       <div class="percent" id="percent">0%</div>
     </div>
 
@@ -400,7 +491,7 @@ button:active{
   <div class="days-card">
 
     <div class="section-title">
-      Daily Progress
+      <span id="dailyTitle">January</span> Daily Progress
     </div>
 
     <div class="column-head">
@@ -419,46 +510,215 @@ button:active{
 
   </div>
 
-  <!-- RESET -->
+  <!-- SAVE MONTH -->
 
-  <div class="reset-card">
-    <b>Reset tracker</b>
-    <button onclick="resetAll()">Reset</button>
+  <div class="save-card">
+
+    <div>
+      <b>Save this month</b>
+      <span id="saveText">Save January's final results.</span>
+    </div>
+
+    <button id="saveMonth">
+      Save
+    </button>
+
+  </div>
+
+  <!-- MONTHS -->
+
+  <div class="months-card">
+
+    <div class="months-title">
+      Your Year
+    </div>
+
+    <div class="months-grid" id="monthsGrid"></div>
+
+  </div>
+
+  <!-- SAVED MONTH VIEW -->
+
+  <div class="month-view" id="monthView">
+
+    <div class="month-view-title" id="monthViewTitle">
+      January
+    </div>
+
+    <div class="month-summary">
+
+      <div class="summary-box">
+        <b id="savedDays">0/31</b>
+        <span>DAYS COMPLETED</span>
+      </div>
+
+      <div class="summary-box">
+        <b id="savedScore">0/155</b>
+        <span>TOTAL SCORE</span>
+      </div>
+
+      <div class="summary-box">
+        <b id="savedT">0/31</b>
+        <span>T</span>
+      </div>
+
+      <div class="summary-box">
+        <b id="savedW">0/31</b>
+        <span>W</span>
+      </div>
+
+    </div>
+
+    <div class="note">
+      This is a saved snapshot of your month. Your current tracker can continue independently.
+    </div>
+
   </div>
 
 </main>
 
 <script>
 
-const K='tracker31';
+/*
+  12-MONTH TRACKER
 
-let x=JSON.parse(localStorage.getItem(K)||'null')
-  ||Array.from({length:31},()=>({d:0,s:0,t:0,w:0}));
+  Your existing tracker31 data is automatically
+  moved into January so nothing gets lost.
+*/
 
-/* Keep old saved trackers compatible */
+const OLD_KEY='tracker31';
+const YEAR_KEY='trackerYear';
 
-x.forEach(a=>{
-  if(a.w===undefined)a.w=0;
+const months=[
+  'January','February','March','April',
+  'May','June','July','August',
+  'September','October','November','December'
+];
+
+let oldData=JSON.parse(localStorage.getItem(OLD_KEY)||'null');
+
+let yearData=JSON.parse(localStorage.getItem(YEAR_KEY)||'null');
+
+/* Create the yearly system */
+
+if(!yearData){
+
+  yearData=Array.from(
+    {length:12},
+    ()=>({
+      data:null,
+      saved:false
+    })
+  );
+
+  /*
+    Put the existing tracker into January
+    so current progress is NOT deleted.
+  */
+
+  if(oldData){
+
+    oldData.forEach(a=>{
+      if(a.w===undefined)a.w=0;
+    });
+
+    yearData[0].data=oldData;
+  }
+
+  localStorage.setItem(
+    YEAR_KEY,
+    JSON.stringify(yearData)
+  );
+}
+
+/* Make sure all months have valid data */
+
+yearData.forEach(month=>{
+
+  if(month.data){
+
+    month.data.forEach(day=>{
+
+      if(day.w===undefined)
+        day.w=0;
+
+      if(day.d===undefined)
+        day.d=0;
+
+      if(day.s===undefined)
+        day.s=0;
+
+      if(day.t===undefined)
+        day.t=0;
+
+    });
+
+  }
+
 });
 
-const r=document.getElementById('rows');
+let currentMonth=0;
 
-function save(){
-  localStorage.setItem(K,JSON.stringify(x));
-  stats();
+const r=document.getElementById('rows');
+const monthsGrid=document.getElementById('monthsGrid');
+
+function blankMonth(){
+
+  return Array.from(
+    {length:31},
+    ()=>({d:0,s:0,t:0,w:0})
+  );
+
+}
+
+function getData(){
+
+  if(!yearData[currentMonth].data){
+
+    yearData[currentMonth].data=blankMonth();
+
+  }
+
+  return yearData[currentMonth].data;
+
+}
+
+function saveYear(){
+
+  localStorage.setItem(
+    YEAR_KEY,
+    JSON.stringify(yearData)
+  );
+
+  /*
+    Keep the old key updated too for compatibility.
+  */
+
+  localStorage.setItem(
+    OLD_KEY,
+    JSON.stringify(getData())
+  );
+
 }
 
 function stats(){
 
-  const completed=x.filter(a=>a.d).length;
+  const data=getData();
 
-  const totalScore=x.reduce((q,a)=>q+a.s,0);
+  const completed=data.filter(a=>a.d).length;
 
-  const totalT=x.filter(a=>a.t).length;
+  const totalScore=data.reduce(
+    (q,a)=>q+(Number(a.s)||0),
+    0
+  );
 
-  const totalW=x.filter(a=>a.w).length;
+  const totalT=data.filter(a=>a.t).length;
 
-  const percentage=Math.round((completed/31)*100);
+  const totalW=data.filter(a=>a.w).length;
+
+  const percentage=Math.round(
+    (completed/31)*100
+  );
 
   document.getElementById('progressNumber').textContent=
     completed+' / 31';
@@ -477,47 +737,82 @@ function stats(){
 
   document.getElementById('w').textContent=
     totalW+'/31';
+
+  document.getElementById('progressTitle').textContent=
+    months[currentMonth].toUpperCase()+' PROGRESS';
+
+  document.getElementById('dailyTitle').textContent=
+    months[currentMonth];
+
+  document.getElementById('subtitle').textContent=
+    months[currentMonth]+' • One day at a time.';
+
+  document.getElementById('saveText').textContent=
+    'Save '+months[currentMonth]+"'s final results.";
+
 }
+
+/* Render daily rows */
 
 function render(){
 
+  const data=getData();
+
   r.innerHTML='';
 
-  x.forEach((a,i)=>{
+  data.forEach((a,i)=>{
 
     const z=document.createElement('div');
 
-    z.className='day-row'+(a.d?' complete':'');
+    z.className=
+      'day-row'+
+      (a.d?' complete':'');
 
     z.innerHTML=
 
       '<div class="check-label">'+
-        '<input type="checkbox" '+(a.d?'checked':'')+'>'+
+        '<input type="checkbox" '+
+        (a.d?'checked':'')+
+      '>'+
       '</div>'+
 
       '<div>'+
-        '<div class="day-name">Day '+(i+1)+'</div>'+
+        '<div class="day-name">Day '+
+        (i+1)+
+        '</div>'+
+
         '<div class="day-status">'+
           (a.d?'Completed':'Not completed')+
         '</div>'+
       '</div>'+
 
-      '<input class="score" type="number" min="0" max="5" value="'+a.s+'">'+
+      '<input class="score" type="number" min="0" max="5" value="'+
+      (Number(a.s)||0)+
+      '">' +
 
       '<label class="check-label">'+
-        '<input type="checkbox" '+(a.t?'checked':'')+'>'+
+        '<input type="checkbox" '+
+        (a.t?'checked':'')+
+      '>'+
       '</label>'+
 
       '<label class="check-label">'+
-        '<input type="checkbox" '+(a.w?'checked':'')+'>'+
+        '<input type="checkbox" '+
+        (a.w?'checked':'')+
+      '>'+
       '</label>';
 
     /* DAY */
 
     z.children[0].children[0].onchange=e=>{
+
       a.d=e.target.checked?1:0;
-      save();
+
+      saveYear();
       render();
+      renderMonths();
+      stats();
+
     };
 
     /* SCORE */
@@ -526,26 +821,40 @@ function render(){
 
       a.s=Math.max(
         0,
-        Math.min(5,parseInt(e.target.value)||0)
+        Math.min(
+          5,
+          parseInt(e.target.value)||0
+        )
       );
 
       e.target.value=a.s;
 
-      save();
+      saveYear();
+      stats();
+      renderMonths();
+
     };
 
     /* T */
 
     z.children[3].children[0].onchange=e=>{
+
       a.t=e.target.checked?1:0;
-      save();
+
+      saveYear();
+      stats();
+
     };
 
     /* W */
 
     z.children[4].children[0].onchange=e=>{
+
       a.w=e.target.checked?1:0;
-      save();
+
+      saveYear();
+      stats();
+
     };
 
     r.appendChild(z);
@@ -553,23 +862,179 @@ function render(){
   });
 
   stats();
+
 }
 
-function resetAll(){
+/* Save current month */
 
-  if(confirm('Reset all 31 days?')){
+document.getElementById('saveMonth').onclick=()=>{
 
-    x=Array.from(
-      {length:31},
-      ()=>({d:0,s:0,t:0,w:0})
+  yearData[currentMonth].saved=true;
+
+  saveYear();
+
+  renderMonths();
+
+  alert(
+    months[currentMonth]+
+    ' has been saved!'
+  );
+
+};
+
+/* Calculate percentage */
+
+function monthPercentage(month){
+
+  if(!month.data)
+    return 0;
+
+  const completed=
+    month.data.filter(a=>a.d).length;
+
+  return Math.round(
+    (completed/31)*100
+  );
+
+}
+
+/* Month buttons */
+
+function renderMonths(){
+
+  monthsGrid.innerHTML='';
+
+  months.forEach((month,i)=>{
+
+    const button=document.createElement('button');
+
+    button.type='button';
+
+    button.className='month-button';
+
+    if(i===currentMonth)
+      button.classList.add('active');
+
+    if(yearData[i].saved)
+      button.classList.add('saved');
+
+    const percentage=
+      monthPercentage(yearData[i]);
+
+    button.innerHTML=
+      month.substring(0,3).toUpperCase()+
+      '<span class="month-percent">'+
+      (
+        yearData[i].saved
+        ? percentage+'% complete'
+        : 'Not saved'
+      )+
+      '</span>';
+
+    button.onclick=()=>{
+
+      currentMonth=i;
+
+      document.getElementById('monthView')
+        .classList.remove('show');
+
+      render();
+      renderMonths();
+
+      window.scrollTo({
+        top:0,
+        behavior:'smooth'
+      });
+
+    };
+
+    monthsGrid.appendChild(button);
+
+  });
+
+}
+
+/* Show saved month summary */
+
+function showSavedMonth(i){
+
+  const month=yearData[i];
+
+  if(!month.data)
+    return;
+
+  const data=month.data;
+
+  const completed=
+    data.filter(a=>a.d).length;
+
+  const score=
+    data.reduce(
+      (q,a)=>q+(Number(a.s)||0),
+      0
     );
 
-    save();
-    render();
-  }
+  const t=
+    data.filter(a=>a.t).length;
+
+  const w=
+    data.filter(a=>a.w).length;
+
+  document.getElementById('monthViewTitle').textContent=
+    months[i]+' Saved Results';
+
+  document.getElementById('savedDays').textContent=
+    completed+'/31';
+
+  document.getElementById('savedScore').textContent=
+    score+'/155';
+
+  document.getElementById('savedT').textContent=
+    t+'/31';
+
+  document.getElementById('savedW').textContent=
+    w+'/31';
+
+  document.getElementById('monthView')
+    .classList.add('show');
+
 }
 
+/*
+  Long press / second tap isn't needed.
+  Clicking a saved month loads it as that month's
+  tracker, while the saved snapshot remains stored.
+*/
+
+/* Make saved months open their summary */
+
+function setupMonthButtons(){
+
+  const buttons=
+    monthsGrid.querySelectorAll('.month-button');
+
+  buttons.forEach((button,i)=>{
+
+    if(yearData[i].saved){
+
+      button.addEventListener(
+        'dblclick',
+        ()=>{
+          showSavedMonth(i);
+        }
+      );
+
+    }
+
+  });
+
+}
+
+/* Initial render */
+
 render();
+renderMonths();
+setupMonthButtons();
 
 </script>
 
