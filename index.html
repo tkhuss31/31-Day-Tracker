@@ -15,167 +15,196 @@
 }
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;
-  background:#f2f2f7;
   margin:0;
+  background:#f2f2f7;
   color:#111;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;
   -webkit-font-smoothing:antialiased;
 }
 
 .app{
-  width:100%;
   max-width:520px;
   margin:auto;
-  padding:calc(18px + env(safe-area-inset-top)) 14px calc(35px + env(safe-area-inset-bottom));
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(30px + env(safe-area-inset-bottom));
 }
 
 /* HEADER */
 
 .header{
-  padding:8px 6px 20px;
+  padding:10px 5px 18px;
 }
 
 h1{
   margin:0;
   font-size:34px;
-  line-height:1.1;
-  letter-spacing:-1.2px;
+  line-height:1.05;
+  letter-spacing:-1.4px;
   font-weight:750;
 }
 
 .sub{
-  color:#777;
   margin:7px 0 0;
+  color:#8a8a8f;
   font-size:15px;
 }
 
-/* CARDS */
+/* PROGRESS CARD */
 
-.card{
-  background:#fff;
-  border-radius:20px;
-  padding:15px;
+.progress-card{
+  background:#111;
+  color:white;
+  border-radius:24px;
+  padding:21px;
   margin-bottom:14px;
-  box-shadow:0 1px 2px rgba(0,0,0,.04);
+  box-shadow:0 5px 18px rgba(0,0,0,.12);
+}
+
+.progress-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.progress-title{
+  font-size:13px;
+  font-weight:600;
+  opacity:.65;
+  letter-spacing:.3px;
+}
+
+.percent{
+  font-size:14px;
+  font-weight:700;
+}
+
+.progress-number{
+  font-size:48px;
+  line-height:1;
+  font-weight:750;
+  letter-spacing:-2px;
+  margin:10px 0 15px;
+}
+
+.progress-bar{
+  height:9px;
+  background:#3b3b3d;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:white;
+  border-radius:20px;
+  transition:width .25s ease;
 }
 
 /* STATS */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-bottom:14px;
 }
 
 .stat{
+  background:white;
+  border-radius:18px;
+  padding:14px 7px;
   text-align:center;
-  background:#f2f2f7;
-  border-radius:15px;
-  padding:12px 4px 11px;
 }
 
 .stat b{
   display:block;
-  font-size:18px;
-  line-height:22px;
+  font-size:19px;
   font-weight:700;
-  letter-spacing:-.3px;
+  letter-spacing:-.4px;
 }
 
 .stat span{
   display:block;
-  font-size:10px;
-  color:#777;
-  margin-top:3px;
-  font-weight:600;
-  letter-spacing:.3px;
-}
-
-/* TABLE HEADER */
-
-.head{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 64px 32px 32px;
-  align-items:center;
-  padding:2px 7px 9px;
-  font-size:10px;
   color:#8a8a8f;
-  font-weight:600;
-  letter-spacing:.5px;
+  font-size:10px;
+  font-weight:650;
+  margin-top:4px;
+  letter-spacing:.4px;
 }
 
-.head div:nth-child(2),
-.head div:nth-child(3),
-.head div:nth-child(4){
-  text-align:center;
+/* DAYS */
+
+.days-card{
+  background:white;
+  border-radius:22px;
+  padding:12px;
 }
 
-/* ROWS */
+.section-title{
+  font-size:18px;
+  font-weight:700;
+  padding:7px 7px 12px;
+  letter-spacing:-.3px;
+}
 
-.row{
+.day-row{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 64px 32px 32px;
+  grid-template-columns:42px minmax(0,1fr) 58px 44px 44px;
   align-items:center;
-  min-height:57px;
+  min-height:68px;
   border-top:1px solid #eee;
-  padding:5px 7px;
+  gap:6px;
 }
 
-.day{
+/* DAY NUMBER */
+
+.day-number{
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  background:#f2f2f7;
   display:flex;
   align-items:center;
-  gap:10px;
-  font-size:16px;
-  font-weight:600;
-  letter-spacing:-.2px;
-}
-
-/* CHECKBOXES */
-
-input[type=checkbox]{
-  appearance:none;
-  -webkit-appearance:none;
-  width:26px;
-  height:26px;
-  border:2px solid #c7c7cc;
-  border-radius:8px;
-  background:#fff;
-  margin:0;
-  position:relative;
-  flex-shrink:0;
-  transition:.15s ease;
-}
-
-input[type=checkbox]:checked{
-  background:#111;
-  border-color:#111;
-}
-
-input[type=checkbox]:checked:after{
-  content:"✓";
-  color:#fff;
-  position:absolute;
-  left:4px;
-  top:-1px;
+  justify-content:center;
+  font-size:13px;
   font-weight:700;
-  font-size:17px;
+  color:#555;
+}
+
+.day-row.complete .day-number{
+  background:#111;
+  color:white;
+}
+
+.day-name{
+  font-size:15px;
+  font-weight:650;
+}
+
+.day-status{
+  font-size:11px;
+  color:#999;
+  margin-top:2px;
+}
+
+.day-row.complete .day-status{
+  color:#111;
 }
 
 /* SCORE */
 
 .score{
-  width:56px;
+  width:52px;
   height:36px;
-  justify-self:center;
   border:0;
-  outline:none;
+  outline:0;
   border-radius:11px;
   background:#f2f2f7;
   text-align:center;
-  font-size:16px;
-  font-weight:650;
-  color:#111;
   font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  color:#111;
 }
 
 .score:focus{
@@ -184,38 +213,83 @@ input[type=checkbox]:checked:after{
 
 /* T / W */
 
-.t,.w{
-  justify-self:center;
+.check-label{
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-/* NOTE */
+.check-label input{
+  appearance:none;
+  -webkit-appearance:none;
+  width:27px;
+  height:27px;
+  border:2px solid #c7c7cc;
+  border-radius:9px;
+  background:white;
+  margin:0;
+  position:relative;
+  transition:.15s ease;
+}
 
-.note{
-  font-size:12px;
-  line-height:17px;
-  color:#8a8a8f;
-  margin:13px 5px 2px;
+.check-label input:checked{
+  background:#111;
+  border-color:#111;
+}
+
+.check-label input:checked:after{
+  content:"✓";
+  color:white;
+  position:absolute;
+  left:4px;
+  top:-1px;
+  font-size:17px;
+  font-weight:700;
+}
+
+/* COLUMN LABELS */
+
+.column-head{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 58px 44px 44px;
+  gap:6px;
+  padding:0 0 7px;
+  color:#999;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.5px;
+  text-align:center;
+}
+
+.column-head div:nth-child(2){
+  text-align:left;
+}
+
+.column-head div:nth-child(3){
+  text-align:center;
 }
 
 /* RESET */
 
-.actions{
+.reset-card{
+  margin-top:14px;
+  background:white;
+  border-radius:18px;
+  padding:13px 15px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:13px 15px;
 }
 
-.actions b{
+.reset-card b{
   font-size:15px;
-  font-weight:600;
 }
 
 button{
   border:0;
   background:#111;
-  color:#fff;
-  border-radius:12px;
+  color:white;
+  border-radius:11px;
   padding:10px 15px;
   font-family:inherit;
   font-size:14px;
@@ -227,34 +301,46 @@ button:active{
   opacity:.8;
 }
 
+/* NOTE */
+
+.note{
+  color:#999;
+  font-size:11px;
+  line-height:16px;
+  padding:11px 6px 3px;
+}
+
 /* SMALL IPHONES */
 
 @media(max-width:380px){
+
   .app{
     padding-left:10px;
     padding-right:10px;
   }
 
-  .stats{
-    gap:6px;
+  .progress-card{
+    padding:18px;
   }
 
-  .stat{
-    padding-left:2px;
-    padding-right:2px;
+  .progress-number{
+    font-size:43px;
   }
 
-  .stat b{
-    font-size:16px;
+  .day-row{
+    grid-template-columns:38px minmax(0,1fr) 52px 40px 40px;
   }
 
-  .head,
-  .row{
-    grid-template-columns:minmax(0,1fr) 60px 30px 30px;
+  .column-head{
+    grid-template-columns:38px minmax(0,1fr) 52px 40px 40px;
   }
 
   .score{
-    width:52px;
+    width:48px;
+  }
+
+  .day-name{
+    font-size:14px;
   }
 }
 </style>
@@ -269,35 +355,56 @@ button:active{
     <p class="sub">Lock in. One day at a time.</p>
   </div>
 
-  <div class="card">
-    <div class="stats">
+  <!-- PROGRESS -->
 
-      <div class="stat">
-        <b id="d">0/31</b>
-        <span>DAYS</span>
-      </div>
+  <div class="progress-card">
 
-      <div class="stat">
-        <b id="s">0/155</b>
-        <span>SCORE</span>
-      </div>
-
-      <div class="stat">
-        <b id="t">0/31</b>
-        <span>T</span>
-      </div>
-
-      <div class="stat">
-        <b id="w">0/31</b>
-        <span>W</span>
-      </div>
-
+    <div class="progress-top">
+      <div class="progress-title">OVERALL PROGRESS</div>
+      <div class="percent" id="percent">0%</div>
     </div>
+
+    <div class="progress-number" id="progressNumber">
+      0 / 31
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
   </div>
 
-  <div class="card">
+  <!-- STATS -->
 
-    <div class="head">
+  <div class="stats">
+
+    <div class="stat">
+      <b id="s">0/155</b>
+      <span>SCORE</span>
+    </div>
+
+    <div class="stat">
+      <b id="t">0/31</b>
+      <span>T</span>
+    </div>
+
+    <div class="stat">
+      <b id="w">0/31</b>
+      <span>W</span>
+    </div>
+
+  </div>
+
+  <!-- DAYS -->
+
+  <div class="days-card">
+
+    <div class="section-title">
+      Daily Progress
+    </div>
+
+    <div class="column-head">
+      <div></div>
       <div>DAY</div>
       <div>SCORE</div>
       <div>T</div>
@@ -307,12 +414,14 @@ button:active{
     <div id="rows"></div>
 
     <div class="note">
-      Tap a box to complete it. Tap a score to change it from 0–5. Progress saves automatically.
+      Tap the day box to complete a day. Score each day from 0–5. T and W can be checked independently. Everything saves automatically.
     </div>
 
   </div>
 
-  <div class="card actions">
+  <!-- RESET -->
+
+  <div class="reset-card">
     <b>Reset tracker</b>
     <button onclick="resetAll()">Reset</button>
   </div>
@@ -326,13 +435,13 @@ const K='tracker31';
 let x=JSON.parse(localStorage.getItem(K)||'null')
   ||Array.from({length:31},()=>({d:0,s:0,t:0,w:0}));
 
-/* Keep existing trackers compatible */
+/* Keep old saved trackers compatible */
 
 x.forEach(a=>{
   if(a.w===undefined)a.w=0;
 });
 
-let r=document.getElementById('rows');
+const r=document.getElementById('rows');
 
 function save(){
   localStorage.setItem(K,JSON.stringify(x));
@@ -341,17 +450,33 @@ function save(){
 
 function stats(){
 
-  d.textContent=
-    x.filter(a=>a.d).length+'/31';
+  const completed=x.filter(a=>a.d).length;
 
-  s.textContent=
-    x.reduce((q,a)=>q+a.s,0)+'/155';
+  const totalScore=x.reduce((q,a)=>q+a.s,0);
 
-  t.textContent=
-    x.filter(a=>a.t).length+'/31';
+  const totalT=x.filter(a=>a.t).length;
 
-  w.textContent=
-    x.filter(a=>a.w).length+'/31';
+  const totalW=x.filter(a=>a.w).length;
+
+  const percentage=Math.round((completed/31)*100);
+
+  document.getElementById('progressNumber').textContent=
+    completed+' / 31';
+
+  document.getElementById('percent').textContent=
+    percentage+'%';
+
+  document.getElementById('progressFill').style.width=
+    percentage+'%';
+
+  document.getElementById('s').textContent=
+    totalScore+'/155';
+
+  document.getElementById('t').textContent=
+    totalT+'/31';
+
+  document.getElementById('w').textContent=
+    totalW+'/31';
 }
 
 function render(){
@@ -360,51 +485,65 @@ function render(){
 
   x.forEach((a,i)=>{
 
-    let z=document.createElement('div');
+    const z=document.createElement('div');
 
-    z.className='row';
+    z.className='day-row'+(a.d?' complete':'');
 
     z.innerHTML=
-      '<label class="day">'+
-      '<input type="checkbox" '+(a.d?'checked':'')+'>'+
-      '<span>Day '+(i+1)+'</span>'+
-      '</label>'+
+
+      '<div class="check-label">'+
+        '<input type="checkbox" '+(a.d?'checked':'')+'>'+
+      '</div>'+
+
+      '<div>'+
+        '<div class="day-name">Day '+(i+1)+'</div>'+
+        '<div class="day-status">'+
+          (a.d?'Completed':'Not completed')+
+        '</div>'+
+      '</div>'+
 
       '<input class="score" type="number" min="0" max="5" value="'+a.s+'">'+
 
-      '<input class="t" type="checkbox" '+(a.t?'checked':'')+'>'+
+      '<label class="check-label">'+
+        '<input type="checkbox" '+(a.t?'checked':'')+'>'+
+      '</label>'+
 
-      '<input class="w" type="checkbox" '+(a.w?'checked':'')+'>';
+      '<label class="check-label">'+
+        '<input type="checkbox" '+(a.w?'checked':'')+'>'+
+      '</label>';
 
-    /* Day checkbox */
+    /* DAY */
 
     z.children[0].children[0].onchange=e=>{
       a.d=e.target.checked?1:0;
       save();
+      render();
     };
 
-    /* Score */
+    /* SCORE */
 
-    z.children[1].onchange=e=>{
+    z.children[2].onchange=e=>{
+
       a.s=Math.max(
         0,
         Math.min(5,parseInt(e.target.value)||0)
       );
 
       e.target.value=a.s;
+
       save();
     };
 
     /* T */
 
-    z.children[2].onchange=e=>{
+    z.children[3].children[0].onchange=e=>{
       a.t=e.target.checked?1:0;
       save();
     };
 
     /* W */
 
-    z.children[3].onchange=e=>{
+    z.children[4].children[0].onchange=e=>{
       a.w=e.target.checked?1:0;
       save();
     };
